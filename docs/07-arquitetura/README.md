@@ -11,14 +11,12 @@ flowchart TB
     secretaria["Secretaria<br/>[pessoa]"]
     discente["Discente<br/>[pessoa]"]
     sistema["ReservaCI<br/>[sistema]<br/>Reserva de salas e laboratórios"]
-    idp["Provedor de identidade<br/>[sistema externo]"]
     smtp["Servidor de e-mail<br/>[sistema externo]"]
     sigaa["SIGAA<br/>[sistema externo]<br/>Exportação de turmas"]
 
     docente -->|consulta, solicita, cancela| sistema
     secretaria -->|cadastra salas, avalia| sistema
     discente -->|consulta| sistema
-    sistema -->|autentica via OIDC| idp
     sistema -->|envia notificações| smtp
     sigaa -.->|planilha por período| sistema
 ```
@@ -37,7 +35,7 @@ flowchart TB
         interfaces["Interfaces<br/>controllers REST"]
         aplicacao["Aplicação<br/>casos de uso + portas"]
         dominio["Domínio<br/>Sala, Reserva, regras de conflito"]
-        infra["Infraestrutura<br/>repositórios, gateway OIDC, SMTP"]
+        infra["Infraestrutura<br/>repositórios, SMTP"]
         interfaces --> aplicacao --> dominio
         infra -.->|implementa portas| aplicacao
     end
@@ -58,13 +56,11 @@ flowchart LR
         job["Job de notificações<br/>(a cada 1 min)"]
         pg[("PostgreSQL")]
     end
-    idp["Provedor de identidade"]
     smtp["SMTP institucional"]
 
     browser -->|443| nginx --> app --> pg
     job --> pg
     job --> smtp
-    app --> idp
 ```
 
 ## 9.4 Como cada requisito não funcional é atendido
@@ -74,7 +70,10 @@ flowchart LR
 | NF-USA-01 | Formulário pré-preenchido a partir da grade; reserva em 3 interações | TL01 → TL02 |
 | NF-USA-02 | SPA responsiva (layout em coluna abaixo de 600 px) | Contêiner web |
 | NF-DES-01 | Índice por (sala, intervalo) no PostgreSQL; consulta de disponibilidade em uma única query | [ADR-0002](adr/0002-conflito-no-banco.md) |
-| NF-SEG-01 | Todas as rotas da API exigem token OIDC; nginx só serve a SPA e o callback de login | Interfaces + gateway OIDC |
+| NF-SEG-01 | Todas as rotas da API exigem sessão autenticada; nginx só serve a SPA e a tela de login | Interfaces |
+| NF-SEG-03 | Senha guardada apenas como hash; objetos de saída (DTO) da listagem não têm campo de senha | Aplicação + infraestrutura |
+| NF-MAN-01 | Regras de negócio dependem de uma interface de repositório; a implementação (memória, arquivo ou banco) é escolhida na inicialização | [ADR-0003](adr/0003-persistencia-substituivel.md) |
+| NF-CON-03 | Exceções de E/S (`IOException`, `SQLException`) são capturadas na infraestrutura e convertidas numa exceção de negócio com mensagem ao usuário | Infraestrutura |
 | NF-SEG-02 | Tabela de auditoria só de inserção, gravada na mesma transação da mudança de status | Infraestrutura |
 | NF-CON-01 | Restrição de exclusão (`EXCLUDE USING gist`) impede sobreposição mesmo com requisições simultâneas | [ADR-0002](adr/0002-conflito-no-banco.md) |
 | NF-CON-02 | Um único processo + banco na mesma VM; backup diário; monitoramento externo de disponibilidade | Implantação |

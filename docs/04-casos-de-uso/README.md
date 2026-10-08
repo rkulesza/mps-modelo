@@ -12,7 +12,6 @@ flowchart LR
     Docente(("Docente"))
     Secretaria(("Secretaria"))
     Discente(("Discente"))
-    IdP[["Provedor de identidade<br/>(sistema externo)"]]
 
     subgraph ReservaCI
         UC01(["UC01 Solicitar reserva"])
@@ -22,6 +21,8 @@ flowchart LR
         UC05(["UC05 Consultar disponibilidade"])
         UC06(["UC06 Autenticar"])
         UC07(["UC07 Solicitar reserva recorrente"])
+        UC08(["UC08 Cadastrar usuário"])
+        UC09(["UC09 Listar usuários"])
     end
 
     Docente --- UC01
@@ -34,7 +35,8 @@ flowchart LR
     Secretaria --- UC05
     UC01 -. "«include»" .-> UC05
     UC07 -. "«extend»" .-> UC01
-    UC06 --- IdP
+    Secretaria --- UC08
+    Secretaria --- UC09
 ```
 
 > Todos os casos de uso pressupõem UC06 (Autenticar) — omitido das ligações para não poluir o diagrama.
@@ -48,7 +50,9 @@ flowchart LR
 | UC03 Cancelar reserva | Docente | RF05, NF-SEG-02 | [UC03](UC03-cancelar-reserva.md) |
 | UC04 Cadastrar sala | Secretaria | RF01 | — |
 | UC05 Consultar disponibilidade | Docente, Discente, Secretaria | RF02, NF-DES-01 | — |
-| UC06 Autenticar | Todos | RF07, NF-SEG-01 | — |
+| UC06 Autenticar | Todos | RF10, NF-SEG-01 | — |
 | UC07 Solicitar reserva recorrente | Docente | RF06, NF-CON-01 | — |
+| UC08 Cadastrar usuário | Secretaria | RF07, RF11, RF12, NF-SEG-03, NF-MAN-01, NF-CON-03 | — |
+| UC09 Listar usuários | Secretaria | RF09, NF-SEG-03 | — |
 
 **Regra:** depois da primeira entrega, IDs de casos de uso **não** são renumerados nem reaproveitados.

@@ -11,12 +11,15 @@ classDiagram
     class TelaDisponibilidade { <<boundary>> }
     class FormularioReserva { <<boundary>> }
     class PainelSecretaria { <<boundary>> }
-    class GatewayIdentidade { <<boundary>> }
+    class TelaLogin { <<boundary>> }
+    class TelaUsuarios { <<boundary>> }
 
     class ControleConsulta { <<control>> }
     class ControleSolicitacao { <<control>> }
     class ControleAvaliacao { <<control>> }
     class ControleCancelamento { <<control>> }
+    class ControleAutenticacao { <<control>> }
+    class ControleUsuarios { <<control>> }
 
     class Usuario { <<entity>> }
     class Docente { <<entity>> }
@@ -47,7 +50,10 @@ classDiagram
     ControleAvaliacao ..> RegistroAuditoria
     ControleCancelamento ..> Reserva
     ControleCancelamento ..> RegistroAuditoria
-    GatewayIdentidade ..> Usuario
+    TelaLogin ..> ControleAutenticacao
+    TelaUsuarios ..> ControleUsuarios
+    ControleAutenticacao ..> Usuario
+    ControleUsuarios ..> Usuario
 ```
 
 ## Rastreabilidade caso de uso → classes de controle
@@ -58,4 +64,6 @@ classDiagram
 | UC02 Avaliar solicitação | ControleAvaliacao | PainelSecretaria |
 | UC03 Cancelar reserva | ControleCancelamento | TelaDisponibilidade |
 | UC05 Consultar disponibilidade | ControleConsulta | TelaDisponibilidade |
-| UC06 Autenticar | — | GatewayIdentidade |
+| UC06 Autenticar | ControleAutenticacao | TelaLogin |
+| UC08 Cadastrar usuário | ControleUsuarios | TelaUsuarios |
+| UC09 Listar usuários | ControleUsuarios | TelaUsuarios |

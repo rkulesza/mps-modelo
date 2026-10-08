@@ -21,6 +21,7 @@ Este repositório especifica o **ReservaCI**, sistema de reserva de salas e labo
 | `docs/05-analise.md` | Diagrama de classes de análise |
 | `docs/06-interface/` | Rascunhos de tela |
 | `docs/07-arquitetura/` | Arquitetura (C4) e decisões (ADRs) |
+| `docs/08-projeto.md` | Pacotes, diagrama de classes de projeto e padrões |
 | `openspec/changes/` | Mudanças propostas nos requisitos, ainda não incorporadas |
 
 ### 1.3 Documentos relacionados
@@ -50,7 +51,7 @@ As reservas de salas e laboratórios são feitas hoje por e-mail e anotadas em u
 - Cadastro de salas e laboratórios com capacidade e recursos.
 - Consulta de disponibilidade por qualquer usuário autenticado.
 - Solicitação, avaliação e cancelamento de reservas, inclusive recorrentes.
-- Autenticação pela conta institucional.
+- Gerenciamento de usuários (Secretaria, Docente, Discente) com login e senha próprios.
 
 **O sistema NÃO fará (escopo negativo):**
 
@@ -60,7 +61,7 @@ As reservas de salas e laboratórios são feitas hoje por e-mail e anotadas em u
 | Controle de chaves e acesso físico às salas | Fica com a portaria; avaliar em projeto futuro |
 | Reserva de equipamentos avulsos (projetores, notebooks) | Fora do escopo do cliente nesta versão |
 
-**Integração com outros sistemas:** o ReservaCI **não** é autocontido. Ele usa o provedor de identidade institucional para login (RF07), importa a ocupação das turmas regulares do SIGAA (planilha exportada, uma vez por período) e envia e-mails pelo servidor SMTP institucional.
+**Integração com outros sistemas:** o ReservaCI **não** é autocontido. Ele importa a ocupação das turmas regulares do SIGAA (planilha exportada, uma vez por período) e envia e-mails pelo servidor SMTP institucional.
 
 ### 2.4 Usuários do sistema
 
@@ -75,6 +76,6 @@ Todos os usuários têm vínculo com a UFPB e acessam o sistema principalmente p
 ### 2.5 Suposições e restrições gerais
 
 - **R1** — Deve rodar na infraestrutura de máquinas virtuais do CI (Linux, PostgreSQL disponível).
-- **R2** — Login obrigatoriamente pelo provedor de identidade institucional; o sistema não guarda senhas.
+- **R2** — Senhas seguem a política padrão do AWS IAM (RF12) e nunca são exibidas (NF-SEG-03).
 - **R3** — Dados pessoais limitados a nome, e-mail institucional e vínculo (LGPD).
 - **S1** — Supõe-se que a exportação de turmas do SIGAA continuará disponível em formato planilha.

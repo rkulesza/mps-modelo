@@ -2,7 +2,14 @@
 
 <!-- Link para a change: openspec/changes/<nome>/proposal.md -->
 
+**Título no formato de commit:** `feat(escopo): descrição no imperativo` · ver [CONTRIBUTING](../CONTRIBUTING.md)
+
 ## Checklist
+
+- [ ] Branch parte de `develop` (ou de `main`, se for hotfix) e segue `<tipo>/<escopo>-<descricao>`
+- [ ] Testes passando localmente; cobertura não regrediu
+- [ ] Nenhum `TODO` novo sem issue associada
+- [ ] PR com até ~400 linhas (ou justificativa)
 
 - [ ] `openspec validate --all` passa sem erros
 - [ ] Todo requisito novo ou modificado tem ID, **Prioridade** e pelo menos um cenário

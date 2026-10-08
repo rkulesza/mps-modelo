@@ -3,6 +3,8 @@
 Modelo de repositório para a disciplina **Métodos e Projeto de Software** (UFPB · Centro de Informática).
 Ele substitui o antigo *Modelo de Documento de Requisitos* (.docx) por uma documentação **versionada em Git** e orientada a especificações (*spec-driven*), usando o [OpenSpec](https://github.com/Fission-AI/OpenSpec).
 
+**Prazos e o que entregar em cada sprint: [`docs/00-entregas.md`](docs/00-entregas.md).** Regras de branches, commits, PRs e código: [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
 O repositório já vem preenchido com um **exemplo fictício**, o *ReservaCI* (reserva de salas do CI), para mostrar o nível de detalhe esperado. Substitua pelo seu sistema.
 
 ---
@@ -45,6 +47,7 @@ Assistente de IA é **opcional**. Todos os arquivos são Markdown que você pode
 | 7. Diagrama de classes de análise | [`docs/05-analise.md`](docs/05-analise.md) |
 | 8. Descrição da interface | [`docs/06-interface/`](docs/06-interface/) |
 | 9. Diagramas de arquitetura | [`docs/07-arquitetura/`](docs/07-arquitetura/) + ADRs em `adr/` |
+| *(novo)* Pacotes, classes de projeto e padrões | [`docs/08-projeto.md`](docs/08-projeto.md) |
 
 ---
 
@@ -53,7 +56,9 @@ Assistente de IA é **opcional**. Todos os arquivos são Markdown que você pode
 ```text
 .
 ├── README.md                     ← capa, mapa e regras
+├── CONTRIBUTING.md               ← branches, commits, PRs, clean code
 ├── docs/
+│   ├── 00-entregas.md            ← cronograma e checklist por sprint
 │   ├── 01-visao.md               ← introdução e descrição geral
 │   ├── 02-glossario.md
 │   ├── 03-elicitacao.md
@@ -62,14 +67,15 @@ Assistente de IA é **opcional**. Todos os arquivos são Markdown que você pode
 │   ├── 06-interface/             ← wireframes TL01..TLnn
 │   ├── 07-arquitetura/           ← C4 + tabela RNF → decisão
 │   │   └── adr/                  ← registros de decisão de arquitetura
+│   ├── 08-projeto.md             ← pacotes, classes de projeto, padrões
 │   └── _modelos/                 ← modelos em branco (requisito, caso de uso)
 ├── openspec/
 │   ├── config.yaml               ← contexto e regras do projeto
 │   ├── specs/                    ← REQUISITOS EM VIGOR (fonte da verdade)
+│   │   ├── usuarios/spec.md
 │   │   ├── salas/spec.md
 │   │   ├── reservas/spec.md
-│   │   ├── autenticacao/spec.md
-│   │   └── rnf/{usabilidade,desempenho,seguranca,confiabilidade}/spec.md
+│   │   └── rnf/{usabilidade,desempenho,seguranca,confiabilidade,manutenibilidade}/spec.md
 │   └── changes/                  ← mudanças propostas, ainda não incorporadas
 │       ├── notificar-por-email/  ← exemplo: proposal, design, tasks, delta das specs
 │       └── archive/              ← mudanças concluídas (histórico)
@@ -118,11 +124,14 @@ O sistema DEVE permitir que o Docente solicite ...
 
 ## 5. Fluxo de trabalho
 
-### Entrega 1 — linha de base
+Branches, commits e PRs seguem o [`CONTRIBUTING.md`](CONTRIBUTING.md): trabalho em `feat/…`, `fix/…` ou `docs/…` a partir de `develop`; PR para `develop`; em cada data de entrega, PR `develop` → `main` + tag (`v0.1.0`, `v0.2.0`…).
+Depois de criar o repositório a partir do template, crie a branch `develop` e proteja `main` e `develop` contra push direto.
 
-Escreva diretamente em `docs/` e em `openspec/specs/`. Abra um pull request e marque o professor como revisor.
+### Entrega 1 (14/10) — linha de base
 
-### Entregas seguintes — toda mudança de requisito é uma *change*
+Escreva diretamente em `docs/` e em `openspec/specs/` só o **essencial** (gerenciamento de usuários). O que entra está em [`docs/00-entregas.md`](docs/00-entregas.md).
+
+### A partir da Entrega 2 (30/10) — toda mudança de requisito é uma *change*
 
 ```bash
 openspec new change <nome-da-mudanca>   # cria openspec/changes/<nome>/
@@ -150,7 +159,10 @@ Num `MODIFIED`, copie o requisito **inteiro** e depois altere. O arquivamento su
 
 ---
 
-## 6. Checklist de entrega
+## 6. Checklist geral
+
+O checklist **por data** está em [`docs/00-entregas.md`](docs/00-entregas.md). Ao final do semestre, o repositório deve ter:
+
 
 - [ ] `openspec validate --all` sem erros (o selo do Actions está verde)
 - [ ] Visão com escopo negativo e usuários descritos
@@ -162,6 +174,7 @@ Num `MODIFIED`, copie o requisito **inteiro** e depois altere. O arquivamento su
 - [ ] Wireframes das telas citadas nos casos de uso
 - [ ] Arquitetura lógica e física + tabela mostrando como cada RNF é atendido
 - [ ] Pelo menos um ADR
+- [ ] Diagrama de classes de projeto e tabela de padrões em `docs/08-projeto.md`
 
 ---
 

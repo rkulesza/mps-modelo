@@ -10,7 +10,7 @@ O sistema tem poucos usuários simultâneos (≤ 200), uma equipe de 4 estudante
 
 ## Decisão
 
-Implementar um único processo de API organizado em camadas (domínio, aplicação, infraestrutura, interfaces), com módulos por capacidade (`salas`, `reservas`, `autenticacao`), alinhados às pastas de `openspec/specs/`.
+Implementar um único processo de API organizado em camadas (domínio, aplicação, infraestrutura, interfaces), com módulos por capacidade (`salas`, `reservas`, `usuarios`), alinhados às pastas de `openspec/specs/`.
 
 ## Alternativas consideradas
 
