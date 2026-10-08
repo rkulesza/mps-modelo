@@ -1,0 +1,36 @@
+name: Validar especificação
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    env:
+      OPENSPEC_TELEMETRY: "0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Instalar OpenSpec
+        run: npm install -g @fission-ai/openspec@1
+      - name: Validar specs e changes
+        # Sem --strict: o aviso "should contain SHALL or MUST" é esperado em specs em português.
+        run: openspec validate --all
+      - name: Conferir requisitos sem cenário ou sem prioridade
+        run: |
+          falhou=0
+          for f in $(find openspec -name spec.md -not -path '*/archive/*'); do
+            awk -v f="$f" '
+              /^### Requirement:/ { if (req && (!cen || !pri)) { print f ": " req (cen ? "" : " — sem cenário") (pri ? "" : " — sem **Prioridade:**"); bad=1 }
+                                    req=$0; sub(/^### Requirement: /, "", req); cen=0; pri=0; next }
+              /^## (REMOVED|RENAMED)/ { if (req && (!cen || !pri)) { print f ": " req " — incompleto"; bad=1 } req=""; next }
+              /^#### Scenario:/ { cen=1 }
+              /^\*\*Prioridade:\*\*/ { pri=1 }
+              END { if (req && (!cen || !pri)) { print f ": " req (cen ? "" : " — sem cenário") (pri ? "" : " — sem **Prioridade:**"); bad=1 } exit bad }
+            ' "$f" || falhou=1
+          done
+          exit $falhou

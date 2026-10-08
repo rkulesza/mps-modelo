@@ -1,0 +1,30 @@
+@startuml casos-de-uso
+left to right direction
+skinparam packageStyle rectangle
+
+actor Docente
+actor Secretaria
+actor Discente
+actor "Provedor de identidade" as IdP <<sistema>>
+
+rectangle ReservaCI {
+  usecase "UC01 Solicitar reserva" as UC01
+  usecase "UC02 Avaliar solicitação" as UC02
+  usecase "UC03 Cancelar reserva" as UC03
+  usecase "UC04 Cadastrar sala" as UC04
+  usecase "UC05 Consultar disponibilidade" as UC05
+  usecase "UC06 Autenticar" as UC06
+  usecase "UC07 Solicitar reserva recorrente" as UC07
+}
+
+Docente --> UC01
+Docente --> UC03
+Docente --> UC05
+Discente --> UC05
+Secretaria --> UC02
+Secretaria --> UC04
+Secretaria --> UC05
+UC01 ..> UC05 : <<include>>
+UC07 ..> UC01 : <<extend>>
+UC06 --> IdP
+@enduml
